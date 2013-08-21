@@ -7,13 +7,12 @@ datadict should contain the following keys:
 'vals': the corresponding eigenvalues.
 """
 
-
 #display/plotting things
 import wx
 from wx.lib.buttons import GenButton
 import matplotlib
-matplotlib.interactive(True)
-matplotlib.use('WXAgg')
+#matplotlib.interactive(True)
+#matplotlib.use('WXAgg')
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
