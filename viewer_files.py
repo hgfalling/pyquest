@@ -37,4 +37,4 @@ def write_question_viewer(filename,data,row_tree,col_tree,row_vecs,
     datadict["row_vals"] = row_vals
     fout = open(filename,'wb')
     cPickle.dump(datadict,fout)
-    fout.close()  
+    fout.close()

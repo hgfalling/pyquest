@@ -1,5 +1,8 @@
 import numpy as np
 import tree_util
+import sklearn.neighbors as sknn
+import scipy.spatial as spsp
+import markov
 
 def bifolder(row_folder,col_folder,data):
     """
@@ -65,7 +68,7 @@ def _level_avgs(data,col_tree):
     tavg = tree_util.tree_averages(data.T,col_tree)
     averages = np.zeros([col_tree.tree_depth,col_tree.size])
     
-    for node in col_tree.traverse():
+    for node in col_tree:
         averages[node.level-1,node.elements] = tavg[node.idx]
 
     return averages
@@ -73,9 +76,10 @@ def _level_avgs(data,col_tree):
 def level_avgs(data,col_tree):
     """
     data is a matrix mxn.
-    col_tree is a tree with n leaves. 
-    Calculates the average of data for each node of col_tree.
+    col_tree is a tree with n leaves and d levels.
     Return value is an mxdxn matrix, where d is the depth of the col_tree.
+    Entry (i,j,k) is the average response of the ith row to the 
+    folder containing k at the jth level.
     """
     if data.ndim == 1:
         return _level_avgs(data,col_tree)
@@ -83,7 +87,7 @@ def level_avgs(data,col_tree):
     averages = np.zeros([m,col_tree.tree_depth,n])
     
     tavg = tree_util.tree_averages(data.T,col_tree)
-    for node in col_tree.traverse():
+    for node in col_tree:
         averages[:,node.level-1,node.elements] = np.tile(tavg[node.idx],
                                                          (len(node.elements),1)).T
         
@@ -95,7 +99,21 @@ def coef_levels(coefs,tree):
     martingale difference picture.
     """
     mdiffs = np.zeros([tree.tree_depth,tree.size])
-    for node in tree.traverse():
+    for node in tree:
         mdiffs[node.level-1,node.elements] = coefs[node.idx]
     
     return mdiffs
+
+def nn_param(data,start=0):
+    n = data.shape[0]
+    knn = sknn.NearestNeighbors(n_neighbors=n)
+    knn.fit(data)
+    distances,neighbors = knn.kneighbors(data)
+    order = []
+    order.append(start)
+    for _ in xrange(n):
+        nn = [x for x in neighbors[order[-1]] if x not in order]
+        #print "neighbors of {}: {}".format(order[-1],nn)
+        if nn:
+            order.append(nn[0])
+    return order

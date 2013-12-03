@@ -4,7 +4,7 @@ import scipy.sparse.linalg as spsl
 def make_markov_symmetric(data,thres=1e-8):
     """
     data is a (symmetric) affinity matrix. elements less than thres are zeroed.
-    Returns a symmetrized and normalized version of the Markov chain matrix. 
+    Returns a "symmetrized" and normalized version of the Markov chain matrix. 
     """    
     d_mat = data*(data > thres)
     rowsums = np.sum(d_mat,axis=1) + 1e-15
@@ -32,9 +32,12 @@ def markov_eigs(data,n_eigs,normalize=True,thres=1e-8):
     Returns the first n eigenvectors and the corresponding eigenvalues.
     """
     p_mat = make_markov_symmetric(data,thres)
-    n = np.shape(data)[0]
+    return calc_eigs(p_mat,n_eigs,normalize,thres)
+
+def calc_eigs(markov_chain,n_eigs,normalize=True,thres=1e-8):
+    n = np.shape(markov_chain)[0]
     n_eigs = min(n_eigs,n)
-    [vectors,singvals,_] = spsl.svds(p_mat,n_eigs)
+    [vectors,singvals,_] = spsl.svds(markov_chain,n_eigs)
     y = np.argsort(-singvals)
     eigenvalues = singvals[y]
     eigenvectors = vectors[:,y]
@@ -47,4 +50,4 @@ def markov_eigs(data,n_eigs,normalize=True,thres=1e-8):
         eigenvectors[:,1:] *= n_mat2
         
     return eigenvectors, eigenvalues
-
+    

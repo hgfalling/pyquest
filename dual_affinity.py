@@ -35,13 +35,13 @@ def calc_emd(data,row_tree,alpha=1.0,beta=0.0):
         level_sizes[node.level] += node.size
         
     folder_fraction = np.array([node.size for node in row_tree],np.float)
-    for level in xrange(1,row_tree.tree_depth):
+    for level in xrange(1,row_tree.tree_depth+1):
         fsize = np.sum(folder_fraction[level_elements[level]])
         folder_fraction[level_elements[level]] /= fsize
     
     folder_fraction = folder_fraction**beta
     coefs = np.diag(folder_fraction).dot(coefs)
-    for level in xrange(1,row_tree.tree_depth):
+    for level in xrange(1,row_tree.tree_depth+1):
         distances = spsp.distance.cdist(coefs[level_elements[level],:].T,
                                         coefs[level_elements[level],:].T,
                                         "cityblock")
