@@ -7,13 +7,13 @@ import dual_affinity
 import bintree_construct
 import barcode
 import markov
-import scoring
+#import scoring
 import tree_util
 import tree
 import tree_building
 import tree_recon
 import viewer_files
-import quest
+#import quest
 import artificial_data
 import haar
 
