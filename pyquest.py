@@ -494,14 +494,17 @@ class PyQuestParamsPage(wx.Panel):
         elif params.init_aff_type == run_quest.TREE_TYPE_FLEXIBLE:
             self.tree_param_text.SetValue(params.tree_constant)
         
-        self.row_dual_combo.SetSelection(params.row_affinity_type)
+        print params.row_affinity_type
+        self.row_dual_combo.SetSelection(min(params.row_affinity_type,
+                                             self.row_dual_combo.GetCount()-1))
         if params.row_affinity_type == run_quest.DUAL_EMD:
             self.row_param1_text.SetValue(params.row_alpha)
             self.row_param2_text.SetValue(params.row_beta)
         elif params.row_affinity_type == run_quest.DUAL_GAUSSIAN:
             self.row_param1_text.SetValue(params.row_epsilon)
         
-        self.col_dual_combo.SetSelection(params.col_affinity_type)
+        self.col_dual_combo.SetSelection(min(params.col_affinity_type,
+                                             self.col_dual_combo.GetCount()-1))
         if params.col_affinity_type == run_quest.DUAL_EMD:
             self.col_param1_text.SetValue(params.col_alpha)
             self.col_param2_text.SetValue(params.col_beta)
@@ -868,8 +871,8 @@ class PyQuestTreePage(wx.Panel):
     def recreate(self):
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer.Add(self.tree_plot,4,wx.EXPAND)
-        
         if self.tree is not None:
+            print self.data.data_type
             if self.data.data_type == "descs":
                 self.row_data = wx.TextCtrl(self,wx.ID_ANY,
                                         style=wx.TE_MULTILINE|wx.TE_READONLY)
