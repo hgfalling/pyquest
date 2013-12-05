@@ -41,6 +41,9 @@ class ClusterTreeNode(object):
                 return False
         return True
     
+    def __eq__(self,other):
+        return self.compare(other) and other.compare(self)
+    
     def create_subclusters(self,partition):
         """
         Divides a tree node into pieces based on partition. 
@@ -212,6 +215,20 @@ class ClusterTreeNode(object):
         """
         for i in xrange(self.tree_depth):
             print i,sorted([len(x) for x in self.sublevel_elements(i+1)])
+            
+    def folder_set(self,element):
+        """
+        Returns the index set of all parents of element.
+        """
+        return [x.idx for x in self.nodes_list if element in x.elements]
+    
+    def level_partition(self,level):
+        partition = [0]*self.size
+        els = self.sublevel_elements(level)
+        for (idx,l) in enumerate(els):
+            for m in l:
+                partition[m] = idx
+        return partition
 
 def dyadic_tree(n):
     """
