@@ -1,6 +1,6 @@
 pyquest
 =======
 
-pyquest: diffusion analysis of transposable arrays
+pyquest: diffusion analysis of questionnaires.
 
-This repository contains code supporting the Python version of the "questionnaire" software that was originally coded in MATLAB and has been worked on at various times by R. Coifman, M. Gavish, A. Haddad, J. Ankenman, etc.
+This repository now contains IPython notebooks and python code supporting them which are taken from the PhD dissertation of Jerrod Ankenman (also included as a pdf).
